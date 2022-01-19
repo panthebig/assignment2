@@ -63,7 +63,7 @@ public class MMU {
 
         SuccessfulLoad=algorithm.fitProcess(p,currentlyUsedMemorySlots);
 
-        if(SuccessfulLoad!=-1){ //na dw an o allos vazei gia kathe block apo to 0 tis dieuthinseis...alla prepei na einai alliws gt start kai end prepei na einai endiamesa
+        if(SuccessfulLoad!=-1){
             for(int i=0; i<n; i++){
 
                 if(i==0){               //Calcs the i-th BLOCK Start and End
