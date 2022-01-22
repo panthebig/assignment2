@@ -62,7 +62,7 @@ public class FirstFit extends MemoryAllocationAlgorithm {
                         newBlock = true;
                     }
                     if(comp > 0 && comp >= memoryRequirements){
-                        address = newBlock ? currentBlockStart : currentlyUsedMemorySlots.get(t - 1).getEnd();
+                        address = newBlock ? currentBlockStart : currentlyUsedMemorySlots.get(t - 1).getEnd() + 1;
                         flag = true;
                         break;
                     }
@@ -73,7 +73,7 @@ public class FirstFit extends MemoryAllocationAlgorithm {
                         comp = currentBlockEnd - currentEnd;
                     }
                     if(comp > 0 && comp >= memoryRequirements){
-                        address = currentEnd;
+                        address = currentEnd + 1;
                         flag = true;
                         break;
                     }

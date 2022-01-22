@@ -35,7 +35,7 @@ public class NextFit extends MemoryAllocationAlgorithm {
             boolean flag = false;
             int comp = currentlyUsedMemorySlots.get(currentlyUsedMemorySlots.size() - 1).getBlockEnd() - currentlyUsedMemorySlots.get(currentlyUsedMemorySlots.size() - 1).getEnd();
             if(comp > 0 && comp >= p.getMemoryRequirements()){
-                address = currentlyUsedMemorySlots.get(currentlyUsedMemorySlots.size() - 1).getEnd();
+                address = currentlyUsedMemorySlots.get(currentlyUsedMemorySlots.size() - 1).getEnd() + 1;
                 flag = true;
             }
             else{

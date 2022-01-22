@@ -49,7 +49,7 @@ public class BestFit extends MemoryAllocationAlgorithm {
                 if(bestSize == -1 || comp < bestSize)
                 {
                     bestSize = comp;
-                    address = newBlock ? currentBlockStart : currentlyUsedMemorySlots.get(t - 1).getEnd();
+                    address = newBlock ? currentBlockStart : currentlyUsedMemorySlots.get(t - 1).getEnd() + 1;
                 }
             }
             if(t < currentlyUsedMemorySlots.size() - 1 && currentlyUsedMemorySlots.get(t + 1).getStart() - currentEnd < currentBlockEnd - currentEnd){
@@ -62,7 +62,7 @@ public class BestFit extends MemoryAllocationAlgorithm {
                 if(bestSize == -1 || comp < bestSize)
                 {
                     bestSize = comp;
-                    address = currentEnd;
+                    address = currentEnd + 1;
                 }
             }
         }
