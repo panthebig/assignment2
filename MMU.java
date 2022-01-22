@@ -60,9 +60,8 @@ public class MMU {
         }
 
 
-
         SuccessfulLoad=algorithm.fitProcess(p,currentlyUsedMemorySlots);
-        System.out.printf("-----SuccessfulLoad-----%d",SuccessfulLoad);
+        //System.out.printf("-----SuccessfulLoad-----%d "+"\n",SuccessfulLoad);
 
 
         if(SuccessfulLoad!=-1){
@@ -77,11 +76,11 @@ public class MMU {
                     theBlockEnd = theBlockStart + availableBlockSizes[i]-1;
                 }
 
-                if (availableBlockSizes[i]>memoryneeded && SuccessfulLoad>=theBlockStart && SuccessfulLoad<=theBlockEnd){
+                if (availableBlockSizes[i]>=memoryneeded && SuccessfulLoad>=theBlockStart && SuccessfulLoad<=theBlockEnd){
                     int processStart = SuccessfulLoad ;
                     int processEnd = processStart+memoryneeded-1;
 
-                    //System.out.println(theBlockStart);
+                    //System.out.printf("%d %d %d %d  ",processStart,processEnd,theBlockStart,theBlockEnd);
 
                     MemorySlot pr = new MemorySlot(processStart,processEnd,theBlockStart,theBlockEnd);
 
@@ -106,11 +105,14 @@ public class MMU {
 
             }
         }
-
+/*
         if(fit){
             System.out.println("Process got into memory");
         }
-
+        else{
+            System.out.println("den mpike");
+        }
+*/
         return fit;
     }
 }
