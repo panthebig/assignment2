@@ -5,9 +5,8 @@ public class MMU {
     private final int[] availableBlockSizes;
     private MemoryAllocationAlgorithm algorithm;
     private ArrayList<MemorySlot> currentlyUsedMemorySlots;
-    private Process[] Pr;
-    private int[] valid;
-    private int x=0;
+    static private ArrayList<Process> Pr = new ArrayList<Process>();
+
     
     public MMU(int[] availableBlockSizes, MemoryAllocationAlgorithm algorithm) {
         this.availableBlockSizes = availableBlockSizes;
@@ -20,8 +19,9 @@ public class MMU {
         /* TODO: you need to add some code here
          * Hint: this should return true if the process was able to fit into memory
          * and false if not */
-        Pr[x]=p;
-        valid[x]=1;
+
+        Pr.add(p);
+
         int SuccessfulLoad;
         int memoryneeded = p.getMemoryRequirements();
         int n = availableBlockSizes.length;
@@ -34,10 +34,10 @@ public class MMU {
         //memory
         //!!!!
 
-        for(int v=0;v<Pr.length;v++){
-            if(Pr[v].getPCB().getState()==ProcessState.TERMINATED && valid[v]==1){
-                int Prmemory = Pr[v].getMemoryRequirements();
-                valid[v]=0; // !process v is no longer valid for a future pass and remove!
+        for(int v=0;v<Pr.size();v++){
+            if(Pr.get(v).getPCB().getState()==ProcessState.TERMINATED ){
+                int Prmemory = Pr.get(v).getMemoryRequirements();
+                Pr.remove(v);
 
                 //Everytime at each pass only one object is removed at a time!! !!THIS IS BECAUSE THE USE OF OTHER LIBRARIES IS NOT ALLOWED!!
                 boolean flag1 = true;
@@ -103,8 +103,7 @@ public class MMU {
             }
         }
 
-
-        x++;
+        
         return fit;
     }
 }
