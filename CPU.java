@@ -57,7 +57,7 @@ public class CPU {
 
                     if(processes[i].getPCB().getState() == ProcessState.READY || processes[i].GetBurstTime() > ((RoundRobin) scheduler).GetQuantum() ){
                         scheduler.addProcess(processes[i]);
-                        //System.out.println("found process not finished reloading it" + i);
+                        //System.out.println("Found process not finished reloading it" + i);
                     }
 
                 }
