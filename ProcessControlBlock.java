@@ -30,20 +30,25 @@ public class ProcessControlBlock {
          * Hint: update this.state, but also include currentClockTime
          * in startTimes/stopTimes */
         if(this.state == ProcessState.READY && state == ProcessState.RUNNING){
+            this.startTimes.add(currentClockTime);
             CPU.clock += 2;
         }else if(this.state == ProcessState.RUNNING && state == ProcessState.READY){
+            this.stopTimes.add(currentClockTime);
             CPU.clock += 2;
         }else if (this.state == ProcessState.NEW && state == ProcessState.READY){
             CPU.clock += 1;
+        } else{
+            this.stopTimes.add(currentClockTime);
         }
-
+        this.state = state;
+/*
         this.state = state;
         if (state==ProcessState.RUNNING){
             this.startTimes.add(currentClockTime);
         }
         else{  //An den metavainei se katastash running ,dld arxizei na trexei,tote stamataei(eite pause eite remove)
             this.stopTimes.add(currentClockTime);
-        }
+        }*/
     }
     
     public int getPid() { 

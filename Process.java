@@ -67,13 +67,13 @@ public class Process {
         StopTimes = pcb.getStopTimes();
 
         double n=0;
-        for(int i=1;i < StopTimes.size();i++){
+        for(int i=1;i < StartTimes.size();i++){
             int astart = StartTimes.get(i);
             int astop = StopTimes.get(i-1);
-            n = n + (astop-astart);
+            n = n + (astart-astop);
         }
 
-        n = n + StartTimes.get(0); //Add the time from when it is added till it is executed for the first time
+        //n = n + StartTimes.get(0); //Add the time from when it is added till it is executed for the first time
 
         return n;
     }
