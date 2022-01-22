@@ -91,7 +91,7 @@ public class CPU {
 
             tick();
 
-            System.out.println("Total ticks : " + clock);
+            //System.out.println("Total ticks : " + clock);
 
 
         }
