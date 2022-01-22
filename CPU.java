@@ -24,6 +24,7 @@ public class CPU {
         int blockedCycles = 0;
         Process previousProcess = null;
         Process currentProcess = null;
+        int notcount=0;
 
 
 
@@ -57,7 +58,7 @@ public class CPU {
             if(scheduler instanceof RoundRobin && scheduler.processes.size() <= ((RoundRobin) scheduler).GetQuantum()){
                 for (int i=0;i<processes.length;i++){
 
-                    if(processes[i].getPCB().getState() == ProcessState.READY || processes[i].GetBurstTime() > ((RoundRobin) scheduler).GetQuantum() ){
+                    if( (processes[i].getPCB().getState() == ProcessState.READY || processes[i].getPCB().getState() == ProcessState.RUNNING) /*&& processes[i].GetBurstTime() >= ((RoundRobin) scheduler).GetQuantum()*/ ){
                         scheduler.addProcess(processes[i]);
                         //System.out.println("Found process not finished reloading it" + i);
                     }
@@ -70,7 +71,8 @@ public class CPU {
 
             currentProcess = scheduler.getNextProcess();
             if(currentProcess == null){
-                System.out.println("CPU Idle");
+                //System.out.println("CPU Idle");
+                notcount++;
             }else {
                 System.out.println("Process state : "+ currentProcess.getPCB().getPid() + " " + currentProcess.getPCB().getState() );
                 if (currentProcess != previousProcess && previousProcess != null && previousProcess.GetBurstTime() >0){
@@ -96,7 +98,7 @@ public class CPU {
 
         }
 
-        System.out.println("Total ticks : " + --clock);
+        System.out.println("Total ticks : " + (clock-notcount));
 
         /* TODO: you need to add some code here
          * Hint: you need to run tick() in a loop, until there is nothing else to do... */
