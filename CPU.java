@@ -29,9 +29,11 @@ public class CPU {
 
         while(!scheduler.processes.isEmpty() || processesLoaded < processes.length ){
             for (int i=0;i<processes.length;i++){
-                if (mmu.loadProcessIntoRAM(processes[i])){
+                //if (mmu.loadProcessIntoRAM(processes[i])){
+                if (processes[i].getPCB().getState() == ProcessState.NEW && processes[i].GetArrivalTime() <= clock){
                     //if (processes[i].GetArrivalTime() <= clock && !isLoaded[i]) {
-                    if (processes[i].getPCB().getState() == ProcessState.NEW && processes[i].GetArrivalTime() <= clock) {       // Add processes to scheduler
+                    if (mmu.loadProcessIntoRAM(processes[i])) {       // Add processes to scheduler
+                    //if (processes[i].getPCB().getState() == ProcessState.NEW && processes[i].GetArrivalTime() <= clock) {       // Add processes to scheduler
                         processes[i].getPCB().setState(ProcessState.READY,clock);
                         scheduler.addProcess(processes[i]);
                         //isLoaded[i] = true;
