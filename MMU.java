@@ -46,7 +46,7 @@ public class MMU {
                     for (MemorySlot aSlot : currentlyUsedMemorySlots) {
                         if (aSlot.getEnd() - aSlot.getStart() + 1 == Prmemory) {
                             currentlyUsedMemorySlots.remove(aSlot); // Frees up slots from a process with the same space requirements
-                            System.out.println("");
+                            System.out.println("Process removed from memory");
                             flag1 = true;
                             break;
                         }
@@ -62,6 +62,8 @@ public class MMU {
 
 
         SuccessfulLoad=algorithm.fitProcess(p,currentlyUsedMemorySlots);
+        System.out.printf("-----SuccessfulLoad-----%d",SuccessfulLoad);
+
 
         if(SuccessfulLoad!=-1){
             for(int i=0; i<n; i++){
@@ -75,9 +77,11 @@ public class MMU {
                     theBlockEnd = theBlockStart + availableBlockSizes[i]-1;
                 }
 
-                if (availableBlockSizes[i]>=memoryneeded){
+                if (availableBlockSizes[i]>memoryneeded && SuccessfulLoad>=theBlockStart && SuccessfulLoad<=theBlockEnd){
                     int processStart = SuccessfulLoad ;
                     int processEnd = processStart+memoryneeded-1;
+
+                    //System.out.println(theBlockStart);
 
                     MemorySlot pr = new MemorySlot(processStart,processEnd,theBlockStart,theBlockEnd);
 
@@ -103,7 +107,10 @@ public class MMU {
             }
         }
 
-        
+        if(fit){
+            System.out.println("Process got into memory");
+        }
+
         return fit;
     }
 }
