@@ -39,6 +39,11 @@ public class RoundRobin extends Scheduler {
                     processes.remove(0);
                 }
             }
+            for (int i=0;i<processes.size();i++) {
+                if (processes.get(i).getBurstTime() == 0) {
+                    processes.remove(i);
+                }
+            }
             //System.out.println(processes.get(0).GetBurstTime());
             processes.get(0).SetBurstTime(processes.get(0).GetBurstTime()-1);
 
