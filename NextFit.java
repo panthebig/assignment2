@@ -48,6 +48,11 @@ public class NextFit extends MemoryAllocationAlgorithm {
                 }
             }
         }
+        if (address == -1)
+        {
+            FirstFit ff = new FirstFit(this.availableBlockSizes);
+            address = ff.fitProcess(p, currentlyUsedMemorySlots);
+        }
         if (address != -1)
         {
             fit = true;
