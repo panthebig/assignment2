@@ -5,6 +5,7 @@ public class NextFit extends MemoryAllocationAlgorithm {
     public NextFit(int[] availableBlockSizes) {
         super(availableBlockSizes);
     }
+    private static int lastAddress = -1;
 
     public int fitProcess(Process p, ArrayList<MemorySlot> currentlyUsedMemorySlots) {
         boolean fit = false;
@@ -15,12 +16,24 @@ public class NextFit extends MemoryAllocationAlgorithm {
          * should return -1. */
 
         int memoryRequirements = p.getMemoryRequirements();
-        boolean firstPopulated = currentlyUsedMemorySlots.size() > 0;
+        boolean[] usedBlocks = new boolean[this.availableBlockSizes.length];
+        for(int i = 0; i < usedBlocks.length; i++){
+            usedBlocks[i] = false;
+        }
         int[] blockStarts = new int[this.availableBlockSizes.length];
         blockStarts[0] = 0;
         for(int i = 1; i < blockStarts.length; i++){
             blockStarts[i] = blockStarts[i - 1] + this.availableBlockSizes[i - 1];
         }
+        for(int t = 0; t < currentlyUsedMemorySlots.size(); t++){
+            for(int i = 0; i < this.availableBlockSizes.length; i++){
+                if(usedBlocks[i] == false && currentlyUsedMemorySlots.get(t).getBlockStart() == blockStarts[i]){
+                    usedBlocks[i] = true;
+                    break;
+                }
+            }
+        }
+        boolean firstPopulated = currentlyUsedMemorySlots.size() > 0;
         if(!firstPopulated){
             for(int i = 0; i < this.availableBlockSizes.length; i++){
                 if(this.availableBlockSizes[i] >= p.getMemoryRequirements()){
@@ -30,20 +43,54 @@ public class NextFit extends MemoryAllocationAlgorithm {
             }
         }
         else{
-            MemorySlot lastSlot = currentlyUsedMemorySlots.get(currentlyUsedMemorySlots.size() - 1);
-            int index = 0;
             boolean flag = false;
-            int comp = currentlyUsedMemorySlots.get(currentlyUsedMemorySlots.size() - 1).getBlockEnd() - currentlyUsedMemorySlots.get(currentlyUsedMemorySlots.size() - 1).getEnd();
-            if(comp > 0 && comp >= p.getMemoryRequirements()){
-                address = currentlyUsedMemorySlots.get(currentlyUsedMemorySlots.size() - 1).getEnd() + 1;
-                flag = true;
-            }
-            else{
-                for(int i = 0; i < this.availableBlockSizes.length && flag == false; i++){
-                    if(blockStarts[i] >= lastSlot.getBlockEnd() && this.availableBlockSizes[i] >= p.getMemoryRequirements()){
+            int index = 0;
+            for(int i = 0; i < usedBlocks.length && flag == false; i++){
+                if(blockStarts[i] <= this.lastAddress){
+                    continue;
+                }
+                if(usedBlocks[i] == false){
+                    if(this.availableBlockSizes[i] >= p.getMemoryRequirements()){
                         address = blockStarts[i];
                         flag = true;
                         break;
+                    }
+                }
+                else{
+                    for(int t = index; t < currentlyUsedMemorySlots.size(); t++){
+                        if(currentlyUsedMemorySlots.get(t).getBlockStart() > blockStarts[i]){
+                            break;
+                        }
+                        index++;
+                        int currentStart = currentlyUsedMemorySlots.get(t).getStart();
+                        int currentBlockStart = currentlyUsedMemorySlots.get(t).getBlockStart();
+                        int currentEnd = currentlyUsedMemorySlots.get(t).getEnd();
+                        int currentBlockEnd = currentlyUsedMemorySlots.get(t).getBlockEnd();
+                        int comp;
+                        boolean newBlock = false;
+                        if(t > 0 && currentStart - currentBlockStart > currentStart - currentlyUsedMemorySlots.get(t - 1).getEnd()){
+                            comp = currentStart - currentlyUsedMemorySlots.get(t - 1).getEnd();
+                        }
+                        else{
+                            comp = currentStart - currentBlockStart;
+                            newBlock = true;
+                        }
+                        if(comp > 0 && comp >= memoryRequirements){
+                            address = newBlock ? currentBlockStart : currentlyUsedMemorySlots.get(t - 1).getEnd() + 1;
+                            flag = true;
+                            break;
+                        }
+                        if(t < currentlyUsedMemorySlots.size() - 1 && currentlyUsedMemorySlots.get(t + 1).getStart() - currentEnd < currentBlockEnd - currentEnd){
+                            comp = currentlyUsedMemorySlots.get(t + 1).getStart() - currentEnd;
+                        }
+                        else{
+                            comp = currentBlockEnd - currentEnd;
+                        }
+                        if(comp > 0 && comp >= memoryRequirements){
+                            address = currentEnd + 1;
+                            flag = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -55,6 +102,7 @@ public class NextFit extends MemoryAllocationAlgorithm {
         }
         if (address != -1)
         {
+            lastAddress = address;
             fit = true;
         }
         return address;
