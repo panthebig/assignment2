@@ -97,9 +97,9 @@ public class CPU {
                     currentProcess.run();
                 }
 
+                previousProcess = currentProcess;
 
             }
-                previousProcess = currentProcess;
 
 
             tick();
