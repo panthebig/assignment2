@@ -104,10 +104,10 @@ public class CPU {
 
             tick();
 
-            if (currentProcess== null && previousProcess==null && notcount > 10000){
+            if (currentProcess== null && notcount > 1000){
                 if (notcount>maxArrivalTime){
-                    System.out.println("Program terminated no more processes can be loaded");
-                    break;
+                    System.out.println("Program stopped no more processes can be loaded");
+                    return;
                 }
 
             }
